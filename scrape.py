@@ -14,7 +14,7 @@ vs=q.cookies['vs']
 names=[]
 times=[]
 
-metas = bs(q.content,'lxml').find('meta',property='al:ios:url')
+metas = bs(q.content,'html.parser').find('meta',property='al:ios:url')
 
 site_id=metas['content'].replace('vsco://user/', "").replace('/grid', "")
 
@@ -23,14 +23,14 @@ mainUrl = "http://vsco.co/ajxp/%s/2.0/medias?site_id=%s&page=1&size=%s" % (vs, s
 headers = {'cookie': 'vs=%s' % vs}
 
 opener = urllib.URLopener()
-
+print "Scraping VSCO: %s" % (account)
 r = requests.get(mainUrl, headers=headers)
 imgs = []
 
 for i in range(0, len(r.json()['media'])-1):
     try:
         str(imgs.append(r.json()['media'][i]['responsive_url']))
-	str(names.append(datetime.datetime.fromtimestamp(int(r.json()['media'][i]['image_status']['time'])/1000).strftime('%Y-%m-%d %H:%M:%S')))
+	str(names.append(str(datetime.datetime.fromtimestamp(int(r.json()['media'][i]['image_status']['time'])/1000).strftime('%Y-%m-%d %H:%M:%S')).replace(":",".")))
     except:
         print "Exception!"
         continue
@@ -44,4 +44,5 @@ for x in range(0, len(imgs)-1):
         urllib.urlretrieve(str(use), "vsco %s.jpg" % (names[x]))
         print "%s Downloaded" % (names[x])
     except:
+        print "EXCEPT!!!"
         continue
