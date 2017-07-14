@@ -14,6 +14,8 @@ vs=q.cookies['vs']
 names=[]
 times=[]
 date = "null"
+dateStart = "null"
+dateEnd = "null"
 
 metas = bs(q.content,'html.parser').find('meta',property='al:ios:url')
 
@@ -47,7 +49,7 @@ for i in range(0, len(r.json()['media'])-1):
 
 
 for x in range(0, len(imgs)-1):
-    try:
+    #try:
         if date!="null":
             reqUrl = str(imgs[x])
             use = reqUrl.replace("im.", "http://im.")
@@ -71,6 +73,6 @@ for x in range(0, len(imgs)-1):
 
                 urllib.urlretrieve(str(use), "vsco %s.jpg" % (names[x]))
                 print "%s Downloaded" % (names[x])
-    except:
-        print "EXCEPT!!!"
-        continue
+    #except:
+     #   print "EXCEPT!!!"
+      #  continue
