@@ -75,6 +75,8 @@ def crawl_username_for_links(username):
     output_folder_path = path.join(ROOT,username)
     if path.isdir(output_folder_path):
         stop_date = get_latest_file_date(output_folder_path)
+    else:
+        stop_date = 0
 
 
     r = requests.get(firstpage, headers=headers)
