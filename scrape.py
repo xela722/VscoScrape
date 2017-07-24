@@ -55,7 +55,8 @@ def crawl_username_for_links(username):
 
     url = "http://vsco.co/{}/images/1".format(username)
 
-    r = requests.get(url)
+    headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0"}
+    r = requests.get(url, headers=headers)
     if (r.status_code != 200):
         print "Error: {}. Check username: {}".format(r.status_code, username)
         return -1
