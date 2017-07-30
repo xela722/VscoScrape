@@ -22,8 +22,8 @@ import Queue # queue in Python 3
 
 # Global variables
 NUM_DL_THREADS = 10
-ROOT = path.expanduser('./vsco/') # use . for local directory, ~ for user directory
-DEBUG = True # dont download anything or create any directories
+ROOT = path.expanduser('~/Desktop/vsco/') # use . for local directory, ~ for user directory
+DEBUG = False # dont download anything or create any directories
 USERNAMES = []
 q = Queue.LifoQueue()
 
@@ -34,9 +34,9 @@ def crawl_users(usernames = USERNAMES, output_root = ROOT):
     if len(sys.argv) > 1:
         usernames = sys.argv[1].split(',')
         usernames = [x.strip() for x in usernames]
-        # map(strip,usernames)
 
     print "Crawling VSCO Users:", usernames
+    print "Output directory:", ROOT
 
     print "Starting {} download threads".format(NUM_DL_THREADS)
     start_download_threads(NUM_DL_THREADS)
@@ -55,7 +55,8 @@ def crawl_username_for_links(username):
 
     url = "http://vsco.co/{}/images/1".format(username)
 
-    r = requests.get(url)
+    headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0"}
+    r = requests.get(url, headers=headers)
     if (r.status_code != 200):
         print "Error: {}. Check username: {}".format(r.status_code, username)
         return -1
@@ -77,7 +78,6 @@ def crawl_username_for_links(username):
         stop_date = get_latest_file_date(output_folder_path)
     else:
         stop_date = 0
-
 
     r = requests.get(firstpage, headers=headers)
     medias_json = r.json()['media']
