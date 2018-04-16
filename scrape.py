@@ -17,6 +17,7 @@ import sys
 from threading import Thread
 import Queue # queue in Python 3
 
+from pprint import pprint
 
 
 
@@ -53,9 +54,12 @@ def crawl_users(usernames = USERNAMES, output_root = ROOT):
 def crawl_username_for_links(username):
     global q
 
+	
     url = "http://vsco.co/{}/images/1".format(username)
 
     headers = {'user-agent': "Mozilla/5.0 (Windows NT 10.0; WOW64; rv:50.0) Gecko/20100101 Firefox/50.0"}
+
+    p = requests.get("http://vsco.co/content/Static/userinfo",headers=headers)
     r = requests.get(url, headers=headers)
     if (r.status_code != 200):
         print "Error: {}. Check username: {}".format(r.status_code, username)
@@ -63,8 +67,8 @@ def crawl_username_for_links(username):
 
 
     soup = bs(r.content,'html.parser').find('meta',property='al:ios:url')
-
-    vs = r.cookies['vs']
+		
+    vs = p.cookies['vs']
     site_id = soup['content'].replace('vsco://user/', "").replace('/grid', "")
     page = 1
     firstpage = "http://vsco.co/ajxp/{0}/2.0/medias?site_id={1}&page={2}".format(vs, site_id, page) # what does this do? --> &size=%s    , sys.argv[2]
